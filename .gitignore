@@ -179,3 +179,24 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# IDE
+.idea/
+
+# Market data: downloaded by each user with the scripts in data/, never redistributed (licences)
+data/crypto/
+data/fx/
+data/rates/
+data/etf/
+*.parquet
+
+# Outputs of runs (backtests, PDF text extracts, page images), rebuilt on each machine
+results/
+.tmp_pages/
+vault/4 Book/Returns/*.csv
+
+# macOS
+.DS_Store
+
+# Papers: copyrighted, downloaded with the scout scripts
+vault/0 Library/Sources/*.pdf

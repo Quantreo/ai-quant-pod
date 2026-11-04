@@ -1,0 +1,27 @@
+[project]
+name = "ai-quant-pod"
+version = "0.1.0"
+description = "A research pod of Claude Code agents for systematic trading (Quantreo, AI Quant Pod)."
+authors = [
+    {name = "Lucas Inglese", email = "lucas@quantreo.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12,<4"
+dependencies = [
+    "numpy (>=2.0,<3.0)",
+    "pandas (>=3.1.0,<4.0.0)",
+    "pyarrow (>=26.0.0,<27.0.0)",
+    "requests (>=2.34.2,<3.0.0)",
+    "certifi (>=2026.10.19,<2027.0.0)",
+    "pymupdf (>=2.0,<3.0)",
+    "matplotlib (>=3.11.2,<4.0.0)",
+    "tabulate (>=0.10.0,<0.11.0)",
+    "reportlab (>=5.1.0,<6.0.0)"
+]
+
+[tool.poetry]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
