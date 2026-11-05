@@ -1,0 +1,72 @@
+- 2026-11-05 | arxiv:1904.00890 | keep | Momentum and liquidity in cryptocurrencies | Long-only momentum-liquidity sorts on crypto, tested on market data. Saved.
+- 2026-11-05 | openalex:W2935433942 | keep | Momentum and liquidity in cryptocurrencies | Duplicate of arxiv:1904.00890.
+- 2026-11-05 | openalex:W7164043219 | keep | Momentum Trading in Cryptocurrencies: A Comparative Study of Time-Series and Cross-Sectional Strategies | EMA momentum, TS and CS portfolios on 8 coins, 2020-2025. Saved.
+- 2026-11-05 | openalex:W4327968225 | keep | Exploit momentum in Cryptocurrency Market | TS momentum on cross-sectional winners with ML threshold. Saved.
+- 2026-11-05 | openalex:W2978236304 | keep | Momentum trading in cryptocurrencies: Short-term returns and diversification benefits | Momentum strategy with diversification test. PDF on eprints.soton.ac.uk returned 401: manual download. Landing: http://doi.org/10.1016/j.econlet.2019.108728
+- 2026-11-05 | openalex:W4413173481 | keep | Cryptocurrency Momentum: Is It an Illusion? | Tail and power-law risk of six crypto momentum strategies. Wiley PDF returned 403: manual download. Landing: https://doi.org/10.1002/ijfe.70036
+- 2026-11-05 | openalex:W2930793690 | keep | Cryptocurrencies and momentum | Momentum strategy on 143 coins, finds no payoff. ScienceDirect PDF returned 403: manual download. Landing: https://doi.org/10.1016/j.econlet.2019.03.028
+- 2026-11-05 | openalex:W4408984940 | keep | Cryptocurrency momentum has (not) its moments | Momentum crashes, volatility-managed momentum. No PDF link in OpenAlex: manual. Landing: https://doi.org/10.1007/s11408-025-00474-9
+- 2026-11-05 | openalex:W7127056185 | keep | On survivor cryptocurrency momentum | Momentum on 9 survivor coins, weekly data. No PDF link: manual. Landing: https://doi.org/10.1016/j.frl.2026.109602
+- 2026-11-05 | openalex:W4396837285 | keep | Cryptocurrency Volume-Weighted Time Series Momentum | Volume-weighted TS momentum rule. Abstract missing, no PDF link: manual. Landing: https://doi.org/10.2139/ssrn.4825389
+- 2026-11-05 | openalex:W7211873144 | keep | On the Performance of Lagged Momentum and Reversal Strategies Across Daytime and Overnight Sessions in Bitcoin and Ether | Session-based rules on hourly BTC and ETH data. No PDF link: manual. Landing: https://doi.org/10.3390/jrfm19090692
+- 2026-11-05 | openalex:W4360939402 | keep | Cryptocurrency Momentum and Reversal | Cross-sectional momentum and reversal on 2000 coins. No PDF link: manual. Landing: https://doi.org/10.2139/ssrn.3913263
+- 2026-11-05 | openalex:W4405024855 | keep | Do risk preferences drive momentum in cryptocurrencies? | Momentum on survivorship-free data. No PDF link: manual. Landing: https://doi.org/10.1016/j.frl.2024.106531
+- 2026-11-05 | openalex:W3139542328 | keep | Common Risk Factors in Cryptocurrency | Momentum factor in crypto cross-section. No PDF link on OpenAlex: manual. Landing: https://doi.org/10.2139/ssrn.3379131
+- 2026-11-05 | openalex:W2801951207 | maybe | Momentum and contrarian effects on the cryptocurrency market | Momentum test, no abstract. No PDF link: manual. Landing: https://repozytorium.uw.edu.pl//handle/item/112892
+- 2026-11-05 | openalex:W2788930370 | maybe | Portfolio optimization in the cryptocurrency market (thesis) | EMA momentum strategy and allocation, thesis. No PDF link: manual. Landing: http://hdl.handle.net/11250/2487326
+- 2026-11-05 | openalex:W3124318403 | maybe | Momentum in Traditional and Cryptocurrencies Made Simple | Momentum comparison, no abstract. No PDF link: manual. Landing: https://doi.org/10.2139/ssrn.2949379
+- 2026-11-05 | openalex:W3125411723 | maybe | Are Cryptocurrencies' Returns Predictable? The Role of Momentum, Value, Carry and Investor Sentiment | Factor tests, no abstract. No PDF link: manual. Landing: https://doi.org/10.2139/ssrn.3283269
+- 2026-11-05 | arxiv:2003.11352 | maybe | Cryptocurrency Trading: A Comprehensive Survey | Survey of 146 papers on crypto trading signals and strategies. Saved as fallback.
+- 2026-11-05 | arxiv:2510.14435 | maybe | Cryptocurrency as an Investable Asset Class: Coming of Age | Empirical asset-pricing survey of crypto factors, momentum only partly covered. Saved as fallback.
+- 2026-11-05 | arxiv:2304.08902 | maybe | Collective dynamics, diversification and optimal portfolio construction for cryptocurrencies | Portfolio construction brick, not momentum. Not downloaded.
+- 2026-11-05 | arxiv:2607.26188 | maybe | Bitcoin Runs on a Clock: Why Every Price Indicator Dies and the Halving Clock Doesn't | Indicator study, abstract not read in depth. Not downloaded.
+- 2026-11-05 | openalex:W3159259210 | maybe | Extreme tail network analysis of cryptocurrencies and trading strategies | Network and tail analysis mentioning trading strategies, abstract not read. Not downloaded.
+- 2026-11-05 | openalex:W4214762486 | reject | Understanding Cryptocurrencies | General overview, no trading rule.
+- 2026-11-05 | openalex:W7224119369 | reject | Replication code and aggregate results for Signal Confirmation and Whipsaw Losses in Cryptocurrency Momentum Strategies | Code and data package, not a paper PDF.
+- 2026-11-05 | arxiv:2606.27670 | reject | CryptoGAT: Are Time Series Models Effective for Cryptocurrency Forecasting? | Forecasting accuracy, no trading rule.
+- 2026-11-05 | arxiv:2009.11007 | reject | Pricing Cryptocurrency Options | Option pricing, out of scope.
+- 2026-11-05 | arxiv:2211.12356 | reject | Early Warning Signals for Cryptocurrency Market States | Descriptive state detection, no trading rule.
+- 2026-11-05 | arxiv:2502.09079 | reject | Quantifying Cryptocurrency Unpredictability | Complexity and forecasting study, no trading rule.
+- 2026-11-05 | arxiv:1805.08550 | reject | Anticipating cryptocurrency prices using machine learning | Price forecasting, accuracy only.
+- 2026-11-05 | arxiv:1905.08444 | reject | Predicting and Forecasting the Price of Constituents and Index of Cryptocurrency Using Machine Learning | Price forecasting, no trading rule.
+- 2026-11-05 | arxiv:2003.00803 | reject | Ascertaining price formation in cryptocurrency markets with DeepLearning | Price formation study, no trading rule.
+- 2026-11-05 | arxiv:1910.12281 | reject | Deep convolutional autoencoder for cryptocurrency market analysis | Market analysis, no trading rule.
+- 2026-11-05 | arxiv:2010.15403 | reject | Multiscale characteristics of the emerging global cryptocurrency market | Descriptive, no trading rule.
+- 2026-11-05 | arxiv:2301.02027 | reject | Cryptocurrency co-investment network | Descriptive network study.
+- 2026-11-05 | arxiv:1705.05334 | reject | Evolutionary dynamics of the cryptocurrency market | Descriptive, no trading rule.
+- 2026-11-05 | arxiv:1906.11968 | reject | Are cryptocurrency traders pioneers or just risk-seekers? | Investor behaviour, no strategy.
+- 2026-11-05 | arxiv:2308.08554 | reject | AI-Assisted Investigation of On-Chain Parameters | Descriptive on-chain study.
+- 2026-11-05 | arxiv:2112.06552 | reject | Cryptocurrency Market Consolidation in 2020-2021 | Descriptive market structure.
+- 2026-11-05 | arxiv:1806.11348 | reject | Herding behavior in cryptocurrency markets | Descriptive herding study, no trading rule.
+- 2026-11-05 | arxiv:2401.10238 | reject | Interplay between Cryptocurrency Transactions and Online Financial Forums | Descriptive.
+- 2026-11-05 | arxiv:1910.01330 | reject | Homogeneity and heterogeneity of cryptocurrencies | Descriptive.
+- 2026-11-05 | arxiv:2002.09881 | reject | An alpha-Stable Approach to Modelling Highly Speculative Assets and Cryptocurrencies | Statistical modelling, no trading rule.
+- 2026-11-05 | arxiv:2207.04004 | reject | Pairwise and high-order dependencies in the cryptocurrency trading network | Network dependence study.
+- 2026-11-05 | arxiv:1909.10679 | reject | Structural Change Analysis of Active Cryptocurrency Market | Descriptive.
+- 2026-11-05 | arxiv:1405.4498 | reject | The Economics of BitCoin Price Formation | Descriptive econometrics.
+- 2026-11-05 | arxiv:1812.09452 | reject | The Price of BitCoin: GARCH Evidence from High Frequency Data | Volatility modelling, no trading rule.
+- 2026-11-05 | arxiv:1308.3892 | reject | Do the rich get richer? BitCoin transaction network | Descriptive network.
+- 2026-11-05 | arxiv:1906.03430 | reject | Effects of the Introduction of Bitcoin Futures on the Volatility of Bitcoin Returns | Event study, no trading rule.
+- 2026-11-05 | arxiv:2301.10117 | reject | Bitcoin Does Not Hedge Inflation | Descriptive asset study.
+- 2026-11-05 | arxiv:2409.00270 | reject | Bitcoin ETF: Opportunities and risk | Descriptive.
+- 2026-11-05 | arxiv:1707.07977 | reject | Ether: Bitcoin's competitor or ally? | Descriptive.
+- 2026-11-05 | arxiv:2101.03891 | reject | Challenging Practical Features of Bitcoin by the Main Altcoins | Descriptive.
+- 2026-11-05 | arxiv:1707.07618 | reject | Statistical properties and multifractality of Bitcoin | Statistical properties, no trading rule.
+- 2026-11-05 | arxiv:2106.07104 | reject | The link between Bitcoin and Google Trends attention | Descriptive.
+- 2026-11-05 | arxiv:2210.13824 | reject | Modelling the Bitcoin prices and media attention via jump-type processes | Price modelling, no trading rule.
+- 2026-11-05 | arxiv:1712.10287 | reject | Bitcoin Average Dormancy | Descriptive on-chain measure.
+- 2026-11-05 | arxiv:2504.18982 | reject | On Bitcoin Price Prediction | Price forecasting.
+- 2026-11-05 | arxiv:1804.02350 | reject | From Bitcoin to Bitcoin Cash: a network analysis | Descriptive network.
+- 2026-11-05 | arxiv:1605.01354 | reject | Modeling and Simulation of the Economics of Mining in the Bitcoin Market | Mining economics, out of scope.
+- 2026-11-05 | arxiv:2005.00114 | reject | Bitcoin Transaction Networks: an overview | Descriptive network review.
+- 2026-11-05 | arxiv:2009.06874 | reject | Recent scaling properties of Bitcoin price returns | Statistical properties, no trading rule.
+- 2026-11-05 | arxiv:1906.08933 | reject | A bibliometric analysis of Bitcoin scientific production | Bibliometrics.
+- 2026-11-05 | arxiv:1809.07856 | reject | Inferring short-term volatility indicators from Bitcoin blockchain | Volatility forecasting, no trading rule.
+- 2026-11-05 | arxiv:1312.2048 | reject | The False Premises and Promises of Bitcoin | Essay, no test.
+- 2026-11-05 | arxiv:2405.08089 | reject | Comparative Study of Bitcoin Price Prediction | Price forecasting.
+- 2026-11-05 | arxiv:1809.08403 | reject | Chaos and Order in the Bitcoin Market | Statistical properties, no trading rule.
+- 2026-11-05 | arxiv:1506.01513 | reject | Social signals and algorithmic trading of Bitcoin | Social signal study, trading link weak in title, abstract not read in depth.
+- 2026-11-05 | arxiv:1708.04532 | reject | Some stylized facts of the Bitcoin market | Descriptive.
+- 2026-11-05 | arxiv:1811.10109 | reject | The Anatomy of a Cryptocurrency Pump-and-Dump Scheme | Market manipulation study.
+- 2026-11-05 | arxiv:2504.01974 | reject | Cryptocurrency Time Series on the Binary Complexity-Entropy Plane | Descriptive complexity ranking.
+- 2026-11-05 | arxiv:1809.02769 | reject | Worldcoin: A Hypothetical Cryptocurrency | Essay, out of scope.
