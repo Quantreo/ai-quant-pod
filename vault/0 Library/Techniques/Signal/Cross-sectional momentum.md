@@ -1,51 +1,283 @@
 ---
 type: technique
 brick: signal
-aliases: [Past-return rank, Winners minus losers]
-sources: 1
-tested_on: [crypto]
+aliases: [Relative strength, Prior 12-month return sort, Winners minus losers, WML, Price momentum, 12-2 momentum, CS-Mom 1, CS-Mom 12, 12-1 momentum, UMD, 14-day momentum, MOM, Weekly momentum, Daily momentum, CMOM, MOM2-12, Risk-adjusted momentum, RMOM, Sharpe-ranked momentum, currency momentum, MOM(f,h), six-portfolio currency sort, median-split commodity momentum, Sector momentum rotation, J-K momentum, Relative momentum, Top-N relative momentum, Multi-horizon momentum score, Relative-only momentum allocation]
+sources: 17
+tested_on: [commodities, equities, fx, rates, multi-asset, crypto]
 ---
 
 # Cross-sectional momentum
 
 > [!summary]
-> Rank assets on their cumulative past return and label the top group winners and the bottom group losers.
+> Ranks instruments on their past return and goes long the recent winners against the recent losers.
 
 ## How it works
 
-- **Inputs**: price history of each asset in the universe at the rebalance date.
-- **Formula**: cumulative return over a lookback window, then a rank across assets and a cut into groups by quantile.
-- **Lookback / holding**: a lookback window and a rebalance interval, both parameters.
-- **Output**: a group label per asset (losers, neutral, winners).
-- **Direction**: long winners and short losers when momentum holds. The same labels can be used the other way where losers rebound.
-- **Tested on**: crypto.
+- **Inputs**: past return of each instrument in the universe over a lookback.
+- **Formula**: rank the instruments on that return; long the top group, short the bottom group.
+- **Lookback / holding**: a lookback and a holding period, in days, weeks or months; the ranking is redone at each rebalance.
+- **Output**: membership of the long or short group.
+- **Direction**: relative: long winners against losers, whatever the sign of their own returns.
+- **Tested on**: commodity futures, stocks, equity index futures, currencies, government bonds, cryptocurrencies.
+- **Variant**: one-month lookback, a 12-month lookback that skips the most recent month, a 14-day lookback and holding, or a one-week lookback with weekly returns.
+- **Variant**: rank on past Sharpe ratio (risk-adjusted momentum).
+- **Variant**: lookback and holding of 1 to 5 days, the n best and n worst instruments, equal weight (daily momentum).
+- **Variant**: long only, the top n of a small basket (sector ETFs), equal weight, no short leg.
+- **Variant**: rank on price over its 13-month moving average minus 1 and hold the Top N of an ETF universe, equal weight, long only.
+- **Variant**: long only, top 8 of a broad ETF universe on a weighted rank score of the 4, 13 and 26-week returns and the distance to a 30-week average, after a trend filter.
 
 ## What the sources say
 
 ### Parameters
+- **Gorton 2007**
+	- Lookback 12 months, holding 1 month (p. 20-21)
+	- Top half against bottom half, equal weight, rebalanced monthly (p. 19)
+	- Variant: prior 12-month change of the spot price, taken from the nearest futures (p. 21)
+	- 31 commodity futures, 1969-2006 (p. 9)
+- **Daniel 2016**
+	- Rank on return from t-12 to t-2, one month skipped (p. 5-6)
+	- US stocks: top decile minus bottom decile, value weighted, monthly, 1927-2013 (p. 5-6)
+	- Other markets and classes: top third minus bottom third, 1972-2013 (p. 30-31)
+	- Variant: scaled by forecast mean over variance or by inverse volatility (p. 24-25; see [[Mean-variance weighting]], [[Volatility targeting]])
+- **Chernov 2020**
+	- CS-Mom 1: last month's return; CS-Mom 12: last year, skipping the most recent month (p. 16)
+	- Rank weights, one dollar long and one short, nine G10 currencies vs USD, monthly, 1985-2020 (Eq. 11, p. 15-17)
 - **Begušić 2019**
-	- Cumulative return (P(t) - P(t-T)) / P(t-T) with T = 14 days (Eq. 1, p. 3)
-	- Losers: lowest 30%. Neutral: 30% to 70%. Winners: highest 30% (p. 3)
-	- Rebalanced every 14 days (p. 3)
-	- Sorted inside three liquidity brackets (see [[Amihud illiquidity]]) (p. 3)
-	- Variants studied: long-only liquid winners, and long-only illiquid losers (p. 4)
+	- Rank on 14-day return, no skip; top 30% vs bottom 30%, held 14 days (Eq. 1, p. 3)
+	- Equal weight, within Amihud illiquidity terciles, crypto Jan 2015 to Jan 2019 (p. 2-3; see [[Liquidity-conditioned momentum]])
+- **Daniel 2012**
+	- CRSP common stocks, share codes 10 and 11, NYSE, AMEX, NASDAQ (p. 7)
+	- Rank on return t-12 to t-2; value-weighted top minus bottom decile, NYSE breakpoints, monthly, 1927-2013 (p. 7)
+- **Kwon 2019**
+	- Rank on the previous week's return (CMOM 1,1); top quintile minus bottom quintile (p. 4, fn 8)
+	- Three other non-overlapping windows tested: weeks t-4 to t-2, t-26 to t-5, t-52 to t-27 (p. 4)
+	- 32 commodity futures, Datastream, January 1979 to June 2015 (p. 3)
+	- Weights inside the quintiles and exit rule not stated (p. 4)
+- **Liu 2019**
+	- Rank on past 1 to 4-week return; value-weighted quintiles, weekly; 1,707 coins above 1 million USD, 2014-2018 (p. 8, 10)
+	- Factor CMOM: three-week return, top 30% minus bottom 30%, value-weighted (p. 15-16)
+	- Variant: short Bitcoin instead of the bottom quintile (p. 27)
+- **Han 2023**
+	- Momentum and risk-adjusted momentum (rank on past Sharpe ratio), 1 to 26 weeks; value-weighted quintiles, weekly; 2,353 coins, 2014 to mid-2021 (p. 1135, Table 2)
+	- Long-short direction set from the sign of the full-sample spread (p. 1135)
+- **Lustig 2008**
+	- Six portfolios on the currency's return realized at the end of t-1, lookback length not stated; 37 currencies vs USD, monthly, long the highest, short the lowest (p. 32-33; Table 14).
+	- Net version with bid-ask spreads (p. 33).
+- **Grewal 2015**
+	- Rank on the return against USD over the last p periods; long the n best, short the n worst, equal weight, USD-neutral; hold q periods (p. 36-38)
+	- Daily: p, q in 1 to 5 days, n in 1 to 3. Weekly: 1 to 5 weeks. Monthly: 1, 3, 6, 9, 12 (p. 38-40)
+	- 18 currencies vs USD, WM/Reuters 4pm London fix, July 2002 to June 2013, 2007 dropped (p. 32-36)
+- **Asness 2013**
+	- Rank on the past 12-month raw return skipping the latest month (MOM2-12), the same in every class (p. 8-9)
+	- Three equal groups, P3 minus P1; also a rank-weighted factor, one dollar long and short (p. 10; see [[Long-short portfolio weighting]])
+	- Stocks value-weighted, other classes equal-weighted; monthly (p. 10)
+	- Currencies: 10 vs USD, 1979-2011; also 18 equity indexes, 10 bond markets, 27 commodities, stocks in four regions (p. 5-7)
+- **Menkhoff 2011**
+	- Rank on the past f-month excess return, f = 1, 3, 6, 9, 12; six portfolios of one sixth each, long the top, short the bottom, held h = 1, 3, 6, 9, 12 months (p. 12-13)
+	- Weights inside each sixth and the handling of overlap for h > 1 not stated (p. 12)
+	- Up to 48 currencies vs USD, at least 6 per month, end-of-month spot and 1-month forward, 1976-2010 (p. 9-10)
+	- Variant: rank on the past spot change instead of the excess return (p. 13)
+- **Zaremba 2016**
+	- Rank on the excess return of the previous month; 3 and 12 months as checks, no month skipped (p. 34).
+	- Median split: long the top half, short the bottom half, equal weight, monthly, collateralized in a risk-free asset (p. 36).
+	- 26 commodity futures, 1987-2013 (p. 34).
+- **Valach 2024**
+	- Rank on the past J-month return, J in 1, 3, 6, 12; long only the top 3 sector ETFs of a basket, equal weight, held K months, K in 1, 3, 6, 12 (p. 23-24)
+	- Basket set by monetary policy regime (see [[Monetary policy sector rotation]]) (p. 23)
+	- 9 US and 10 European sector ETFs, price returns, March 2003 to March 2023 (p. 23)
+- **Keller 2022**
+	- Score p(t)/SMA(12) - 1 over 13 month-end prices; hold the Top6 of 12 ETFs (G12) or the Top1 of 4 (G4), 1/N each (p. 3, 12)
+	- Rank only: no absolute filter on offensive picks (p. 4)
+	- Monthly, long only, Dec 1970 to Jun 2022 (p. 3, 12)
+- **Unknown 2026**
+	- Score = 0.35 rank(r26) + 0.35 rank(r13) + 0.20 rank(distance to the 30-week average) + 0.10 rank(r4); ranks are cross-section percentiles on Fridays (Eq. 1, p. 7)
+	- Long only, 8 slots of 12.5%, entries every other Friday; free slots stay in cash (p. 7-8)
+	- Pure version for comparison: top 8 on the 1, 3, 6 or 12-month return, no filter, cap or exit (Table 3 D)
+	- 3,215 US ETFs, weekly, Aug 2001 to May 2026 (p. 6)
+- **Prior-Sanz 2026**
+	- Relative momentum coded for selection on lookback return rankings (p. 7).
+	- Lookbacks not stated; set by each of 5 published designs (Group 7, about 10 assets each) (Table 1).
+	- Monthly, month-end close, 0.2% round trip (p. 6).
 
 ### Why
-- **Begušić 2019**: momentum may come from investor herding and is stronger in liquid states, as in international equities. The herding link is cited from other studies, not tested (p. 1, 2, 4).
+- **Gorton 2007**
+	- Past returns proxy inventories, which adjust slowly; 12 months also covers annual seasonality (p. 20-21)
+	- A year-on-year spot change removes the seasonality of spot prices (p. 21)
+	- Inventories rebuild slowly after a shock (p. 8)
+- **Daniel 2016**
+	- Skipping one month avoids the short-term one-month reversal (p. 6)
+- **Chernov 2020**: not argued; follows prior FX and value-momentum papers (p. 16)
+- **Begušić 2019**: not argued for the lookback; momentum linked to herding, cited not tested (p. 4)
+- **Daniel 2012**: skipping one month follows the literature, limits microstructure effects and avoids short-horizon reversal (fn 10, p. 7)
+- **Kwon 2019**
+	- Non-overlapping windows show the marginal profit of each one, following Novy-Marx 2012 (p. 4, fn 7)
+	- Mechanism not settled; speculators chase last week's winners and unwind after two weeks (p. 3, 9)
+- **Liu 2019**: three weeks chosen because it gives the largest spread in the data (fn 7)
+- **Han 2023**: risk-adjusted momentum gives higher risk-adjusted returns and lower tail risk, cited (p. 1135)
+- **Lustig 2008**: a sort on past returns tests whether the carry factor prices portfolios not built on interest rates (p. 32).
+- **Grewal 2015**: not argued for the horizon; extends Menkhoff 2011 to shorter horizons. Possible causes (noise traders, order flow, front-running, slow information) listed, not tested (p. 13-14, 51-52)
+- **Asness 2013**: skipping the month is standard and keeps all classes uniform; currency and index momentum are stronger without the skip, not shown (p. 8-9)
+- **Menkhoff 2011**
+	- Same construction as the equity momentum literature and as the industry; a Deutsche Bank ETF is long the three best and short the three worst G10 currencies over 12 months (fn 13, p. 13)
+	- Authors read the post-formation return, up for 8 to 12 months then down, as under- then over-reaction (p. 25-26)
+- **Zaremba 2016**: median breakpoint instead of deciles, to avoid small-sample bias in a small universe (p. 36).
+- **Valach 2024**: not argued for the lookbacks; sectors are said to peak at different times, cited (p. 22)
+- **Keller 2022**: not argued; slow filter taken from the author's PAA paper (p. 2-3)
+- **Unknown 2026**: weights follow the consensus on the 3 to 12 month horizon (p. 7)
+- **Prior-Sanz 2026**: not argued (p. 7)
 
 ### Evidence
-- **Begušić 2019**: in-sample, Jan 2015 to Jan 2019, 711 coins, gross unless stated
-	- Winners minus losers among liquid coins: 0.26% daily, significant at 5% (Table 1, p. 3)
-	- Same spread among neutral coins -0.06% and illiquid coins -0.33%, not significant (Table 1, p. 3)
-	- Long-only liquid winners: 0.71% daily, IR 1.59 gross; 0.60%, IR 1.27 at 100 bps (Table 2, p. 5). IR is against a cap-weighted portfolio.
+- **Gorton 2007**: real data, in-sample, gross, high minus low half
+	- Futures return sort: 13.36% a year, t = 4.93 (Table 7)
+	- Spot return sort: 13.85% a year, t = 4.95 (Table 8)
+	- 1990-2006: 15.36% (t = 4.60) and 16.03% (t = 4.47) (Tables 7-8)
+	- The high-momentum half holds low inventories: -9.30 vs 9.88, t = -8.26 (Table 7)
+- **Daniel 2016**: real data, in-sample, gross
+	- US WML 1927-2013: 17.9% a year, Sharpe 0.60, monthly skewness -4.70 (Table 1)
+	- Static Sharpe 1972-2013: from 0.004 (bonds) and 0.067 (Japan) to 0.705 (index futures); currencies 0.296 (Table 10)
+	- Worst US month -74.36% (Aug 1932); 14 of 15 worst months follow a negative 2-year market (Table 2)
+- **Chernov 2020**: real data, in-sample, gross, G10 1985-2020
+	- Sharpe 0.179 (CS-Mom 1) and 0.175 (CS-Mom 12), the lowest of nine strategies; means not significant, t 1.06 and 1.04 (Table 2B)
+	- Optimal timing alpha 2.40 (t 2.14) and 2.69 (t 2.42) (Table 4A)
+	- Hedged of the unpriced part: Sharpe ≈0.56 and ≈0.75 (≈ Fig. 1)
+- **Begušić 2019**: real data, in-sample, gross, crypto 2015-2019
+	- Winners minus losers, liquid coins: 0.26% a day, significant at 5% (Table 1)
+	- Neutral-liquidity coins -0.06%, illiquid coins -0.33%, both not significant (Table 1)
+- **Daniel 2012**: real data, in-sample, gross, US 1927-2013
+	- Mean 1.18% a month, Sharpe 0.52, skewness -2.43, worst month -79.57% (Table 1)
+	- CAPM alpha 1.52% a month (t = 7.10); FF3 1.76% (t = 8.20) (Table 1, p. 7)
+	- Hou et al. four-factor alpha 0.39% a month (t = 1.07), 1967-2013 (fn 4, p. 1)
+- **Kwon 2019**: real data, in-sample, gross, commodities 1979-2015
+	- Weekly winners minus losers: 0.20% a week, t = 4.49 (Table 2A)
+	- After AVG and CARRY: 0.20% (t = 4.30); yearly window 0.09% (t = 1.46) (Table 2B)
+	- Weekly window vs UMD: loading 0.01 (t = 0.99) (Table 3A)
+- **Liu 2019**: real data, in-sample, gross, crypto 2014-2018
+	- Weekly 5-1: 2.7% (1 week) to 4.1% (3 weeks, t = 2.74) (Table 4)
+	- 8 to 100-week momentum not significant (Table 7)
+	- Above-median size 4.2% a week (t = 2.57), below-median 0.6% (t = 0.30) (Table A.2)
+- **Han 2023**: real data, in-sample, gross, crypto 2014-2021
+	- MOM1 0.0359 a week, falling to -0.0177 at 26 weeks (Table 3)
+	- RMOM3 0.0302 a week; RMOM26 -0.0110 (Table 3)
+	- Small coins with high RMOM 5.35% a week (1 week); big coins with low RMOM about zero (Table 16)
+- **Lustig 2008**: real data, in-sample, net of bid-ask, currencies 11/1983-03/2008.
+	- High minus low 5.42% a year, Sharpe 0.50; gross 9.32%, 0.86 (p. 33; Table 14).
+	- Developed currencies: net spreads -1.76% to 1.49%, Sharpe -0.25 to 0.18 (Table 14).
+- **Grewal 2015**: real data, in-sample, excess return (forward-based, mid rates), gross, master's thesis
+	- Daily, one pair per side, 1-day formation and holding: 5.58% a year whole sample; 6.79% before 2007, 4.32% after 2008 (Table 3.1)
+	- Same portfolio, other daily cells: 21 of 25 negative, down to -3.66% (Table 3.1)
+	- Weekly, one pair, 1-week formation and holding: -5.73%; every one-pair cell negative after 2008 (Table 3.3)
+	- Weekly before 2008, formation 2, holding 1: minors and exotics 7.15%, majors -2.36% (Tables 4.5-4.6)
+- **Asness 2013**: real data, in-sample, gross, to July 2011
+	- Currencies: spread mean 3.5% (t = 1.90), Sharpe 0.34; factor 3.0% (t = 1.77), 0.32 (Table I Panel B)
+	- All asset classes: Sharpe 0.76 (spread) and 0.81 (factor) (Table I Panel B)
+	- Bonds: Sharpe 0.06, t = 0.35; Japan stocks 0.09, t = 0.57 (Table I)
+- **Menkhoff 2011**: real data, in-sample, gross unless stated, 1976-2010
+	- f = 1, h = 1: 9.46% a year (t = 5.31), Sharpe 0.95; f = 12, h = 12: 1.89% (t = 1.04) (Table 1)
+	- Net of full quoted spreads: 3.92% (t = 2.20); at 75% of the spread 5.28%, at 50% 6.64% (Tables 8, 9)
+	- 15 developed currencies only: 3.83% gross, 0.79% net (t = 0.44) (Tables A.12, A.13)
+	- Correlation with the carry long-short portfolio: 0.04 (Table 5A)
+- **Zaremba 2016**: real data, in-sample, excess return, no costs.
+	- All markets: 1 month 0.39% a month (t = 1.38), 3 months 0.65% (t = 2.60), 12 months 0.74% (t = 2.79) (Table 4).
+	- 12-month alpha 0.72% (t = 2.69) on the index model (Table 5).
+- **Valach 2024**: real data, in-sample, gross, zero costs, no hold-out, March 2004 to March 2023
+	- US, tightening months: J1K12 0.79% a month, Sharpe 0.25 against S&P 500 0.74%, 0.21 (Table 4)
+	- US, easing months: Sharpe 0.13 to 0.17 against 0.18 for the S&P 500 (Table 4)
+	- Europe, easing months: Sharpe 0.10 to 0.17 against 0.14 for STOXX 600; tightening months about 0 against -0.08 (Table 5)
+
+- **Keller 2022**: real data, in-sample, 0.1% one-way cost listed, ETFs Dec 1970 to Jun 2022
+	- Number of offensive picks, G4: Top1 R 21.0%, D 14.6%; Top2 R 17.7%, D 12.7% (Fig 15)
+	- G12: Top6 R 14.6%, D 8.7%; Top3 R 16.4%, D 11.4% (Fig 15)
+	- Combined with a canary switch; the ranking alone is not tested (p. 5-9)
+- **Unknown 2026**: real data, in-sample, net of 20 bp per side
+	- Pure version: Sharpe +0.215 (1 month) to -0.167 (12 months), drawdown -69.5% to -81.9%, against SPY 0.459 (Table 3 D)
+	- Same ranking inside the full design (trend filter, category caps, 7% trailing stop): Sharpe 1.336, drawdown -6.98% (Table 3 A)
+	- Pure-version CAGR falls as the lookback rises (Table 3 D)
+- **Prior-Sanz 2026**: real data, vendor-run rules, 1995-April 2025, net of 0.2% round trip
+	- Relative-only group (5 strategies): mean return 10.83%, vol 11.72%, Sharpe 0.74, the highest return of ten groups (p. 26).
+	- Medians: return 10.52%, vol 11.95%, Sharpe 0.72 (p. 26).
+	- Relative dummy in the 30-year Sharpe regression: +0.01 (0.04), not significant; 2020-23 +0.32*** (Tables 4, 10).
 
 ### Limits
+- **Gorton 2007**
+	- One lookback and one holding period only (p. 20-21)
+	- Return correlation with the high-basis portfolio is 0.87 (p. 21)
+	- Part of the return is orthogonal to inventories, left unexplained (p. 25)
+	- No costs (whole paper)
+- **Daniel 2016**
+	- Crashes in rebounds after bear markets, driven by the short leg of losers (p. 10)
+	- No costs; one lookback only (p. 5, 41)
+- **Chernov 2020**
+	- CS-Mom 12 alpha on the authors' factor -1.22 (t -0.82) (Table 2B)
+	- No transaction costs (whole paper)
 - **Begušić 2019**
-	- One setting only; no test of the window, the cutoffs or the rebalance interval
-	- No t-statistics printed; four years of data (p. 2)
-	- Shorting is limited in crypto, so long-only legs are studied (p. 4)
-	- Cost method is not stated; Figure 2 assumes zero costs and zero market impact (p. 5)
+	- One lookback only; no t-statistics printed (p. 3, Table 1)
+	- Printed spreads differ from the differences of cell means (Table 1)
+- **Daniel 2012**
+	- 13 months below -20%; in them losers gain 45.69% vs winners 6.32% (Table 2)
+	- No costs (whole paper)
+- **Kwon 2019**
+	- No costs, Sharpe ratio, sector or sub-period results (whole paper)
+	- Sector and double-sort controls are in an online supplement, not read (fn 10, p. 5-6)
+	- Text claims about Table 6 do not match the table (p. 10, Table 6)
+- **Liu 2019**
+	- Not significant in Fama-MacBeth regressions on all coins (Table 13)
+	- Shorting Bitcoin instead: 1, 2, 4-week momentum lose significance (Table 12)
+	- No costs (p. 8)
+- **Han 2023**
+	- No costs; shorting assumed (p. 1128)
+	- Momentum strongest in small coins, opposite to Liu 2019 (Table 16)
+- **Lustig 2008**
+	- High-momentum currencies have larger spreads: 9.32% gross falls to 5.42% net (p. 33).
+	- They also have higher interest rates, spread under 300 bp between extremes (p. 33).
+- **Grewal 2015**
+	- No costs, no t-statistics, no Sharpe, no drawdown (whole thesis)
+	- Overlapping holding periods and annualization not described (p. 39)
+	- Pegged currencies (HKD, DKK, SGD) kept in the sample (Table 1)
+	- Text and tables disagree on which period gives -3.17% (p. 45, Table 3.1)
+- **Asness 2013**
+	- No costs (p. 29)
+	- Currency premium sits in the top third; bottom and middle thirds earn -0.7% and 0.3% (Table I Panel B)
+	- Not significant in bonds and Japan stocks (Table I)
+- **Menkhoff 2011**
+	- Turnover 74% a month for f = 1, h = 1 (Table A.4)
+	- Quoted spreads are indicative and too high, so net figures are a lower bound (p. 12)
+	- Gross return close to zero after 2007 (≈ Fig. 7)
+- **Zaremba 2016**
+	- 1-month version not significant (Table 4).
+	- Table 4 Sharpe ratios are identical to Table 2 (Tables 2, 4).
+	- No transaction costs (not addressed).
+- **Keller 2022**
+	- Universe choice (QQQ for SPY) is in-sample optimal (note 10)
+	- Ranking never tested without the canary switch (p. 5-9)
+- **Valach 2024**
+	- Zero costs by assumption; best cell chosen on the full sample; no significance tests (p. 24, Fig. 1-2)
+	- US benchmark is total return, European benchmark a price index (p. 23)
+	- No comparison with the same ranking without the policy basket (not addressed)
+- **Unknown 2026**
+	- Weights of the score are not tested against alternatives (p. 7)
+	- The gain comes from the layers around the ranking, say the authors (p. 19-20); the score alone is not isolated
+	- Preprint, not peer reviewed (p. 1)
+- **Prior-Sanz 2026**
+	- Highest volatility of the tactical groups; five strategies, no rule or per-strategy result (p. 26).
+	- The weakest 1-year strategy and one of the weakest in the 2025 two-month window are Group 7 (p. 18, 24).
+	- 2008-09 relative strategies had negative median Sharpe (p. 21).
 
 ## Sources
 
+- [[2007 - Gorton Hayashi Rouwenhorst - The Fundamentals of Commodity Futures Returns]] (Gorton 2007)
+- [[2016 - Daniel Moskowitz - Momentum crashes]] (Daniel 2016)
+- [[2022 - Chernov Dahlquist Lochstoer - Pricing Currency Risks]] (Chernov 2020)
 - [[2019 - Begušić Kostanjčar - Momentum and liquidity in cryptocurrencies]] (Begušić 2019)
+- [[2012 - Daniel Jagannathan Kim - Tail Risk in Momentum Strategy Returns]] (Daniel 2012)
+- [[2019 - Kwon Kang Yun - Weekly momentum in the commodity futures market]] (Kwon 2019)
+- [[2019 - Liu Tsyvinski Wu - Common Risk Factors in Cryptocurrency]] (Liu 2019)
+- [[2023 - Han Newton Platanakis et al - On the (almost) stochastic dominance of cryptocurrency factor portfolios]] (Han 2023)
+- [[2008 - Lustig Roussanov Verdelhan - Common Risk Factors in Currency Markets]] (Lustig 2008)
+- [[2015 - Grewal - Momentum in the Foreign Exchange Market]] (Grewal 2015)
+- [[2013 - Asness Moskowitz Pedersen - Value and Momentum Everywhere]] (Asness 2013)
+- [[2011 - Menkhoff Sarno Schmeling Schrimpf - Currency Momentum Strategies]] (Menkhoff 2011)
+- [[2016 - Zaremba - Strategies Based on Momentum and Term Structure in Financialized Commodity Markets]] (Zaremba 2016)
+- [[2024 - Valach Paciga Bohdalova - Application of Sector Rotation in Active Portfolio Management for US and EU Stock Markets]] (Valach 2024)
+- [[2022 - Keller - Relative and Absolute Momentum in Times of Rising Low Yields Bold Asset Allocation (BAA)]] (Keller 2022)
+- [[2026 - Unknown authors - Momentum Strategies in ETFs under Simple Operational Rules]] (Unknown 2026)
+- [[2026 - Prior-Sanz Vizuete-Luciano Cruz-Zayash et al - The long-term efficiency of tactical asset allocation Evidence from 86 systematic strategies (1995-2025)]] (Prior-Sanz 2026)

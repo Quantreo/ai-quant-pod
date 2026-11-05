@@ -1,173 +1,157 @@
 ---
 type: reading-note
 source: paper
-title: Momentum and liquidity in cryptocurrencies
+title: "Momentum and liquidity in cryptocurrencies"
 authors: Begušić, Kostanjčar
-affiliations: Laboratory for Financial and Risk Analytics, Faculty of Electrical Engineering and Computing, University of Zagreb
+affiliations: Begušić and Kostanjčar (Laboratory for Financial and Risk Analytics, Faculty of Electrical Engineering and Computing, University of Zagreb)
 year: 2019
-venue: arXiv:1904.00890v1 [q-fin.GN], preprint submitted to Elsevier
-doi: none (arXiv:1904.00890)
+venue: arXiv preprint 1904.00890v1 (q-fin.GN), marked as submitted to Elsevier, dated 31 March 2019
+doi: none given; arXiv:1904.00890
 pdf: "[[2019 - Begušić Kostanjčar - Momentum and liquidity in cryptocurrencies.pdf]]"
-version: preprint v1, 31 March 2019
+version: preprint v1, not peer-reviewed
 tier: 1
 read: full
 tags: [trend, crypto, weekly]
-date: 2026-11-05
+date: 2026-10-23
 ---
 
 # Momentum and liquidity in cryptocurrencies (Begušić, Kostanjčar 2019)
 
 ## Summary
 
-- **Finding**: Jan 2015 to Jan 2019, 711 coins, 14-day momentum: significant only among liquid coins (winners minus losers 0.26% daily). Illiquid losers earn 1.07% daily, best of nine cells. Gross.
-- **Mechanism (authors)**: investor herding explains momentum in liquid coins; illiquid coins mean-revert. Asserted by citation, not tested in the paper.
-- **Where it works best**: long-only illiquid losers, IR 2.49 gross and 2.16 at 100 bps. Long-only liquid winners, IR 1.59 gross and 1.27 at 100 bps. IR is against a cap-weighted portfolio.
-- **Weak spots**: momentum not significant in neutral (-0.06%) or illiquid (-0.33%) coins. Authors expect illiquid losers to cost more than assumed, as spreads are wider.
-- **Main caveats**: in-sample, four years, no t-statistics, no robustness to window or cutoffs, cost method unstated. IML and UMD cells do not equal the differences of the printed means.
+- **Finding**: in 3x3 sorts on 14-day return and Amihud illiquidity, winners minus losers earns 0.26% a day in liquid coins; illiquid minus liquid 0.52% among losers. Gross, 2015-2019.
+- **Mechanism (authors)**: investor herding and social-signal feedback explain momentum in liquid coins. Illiquid losers echo earlier evidence of mean reversion in illiquid coins. Not tested.
+- **Where it works best**: long-only illiquid losers (1.07% a day, IR 2.49) and liquid winners (0.71%, IR 1.59), against a cap-weighted benchmark, gross.
+- **Weak spots**: momentum negative, not significant, in neutral and illiquid coins. Authors admit illiquid losers may deteriorate through bid-ask costs. All portfolios fall sharply through 2018.
+- **Main caveats**: one in-sample specification, no t-stats printed, cost method unstated, coins per portfolio unreported, ≈ 20 to ≈ 540 coins over time, survivorship not discussed.
 
-Page numbers follow the PDF, which matches the printed pages (1 to 7). Values marked ≈ are read from a chart. The PDF captions say "Slika" and "Tablica"; this note says Figure and Table.
+Page numbers are the printed page numbers, which match the PDF (7 pages). Values marked ≈ are read from a chart.
 
 ## 1. Mechanism (authors' claim)
 
 | # | Claim | Evidence given | Where |
 | --- | --- | --- | --- |
-| 1 | Momentum may be caused by investor herding. It is strongest in highly liquid coins. | UMD is significant only in the liquid bracket (0.26%). Positive feedback in socio-economic signals is cited from another study [15]. No test of herding. | p. 2, 4 |
-| 2 | Illiquid coins mean-revert. | Illiquid losers 1.07% vs illiquid winners 0.53% daily. The authors say this "seems to confirm" Wei [10]. | p. 3-4 |
-| 3 | Motivation: momentum is stronger in liquid states in international equities [12]. | Cited, not tested here. | p. 1 |
+| 1 | Momentum may be caused by investor herding; with positive feedback found in socio-economic signals around crypto, this explains why momentum is strongest in liquid coins | The pattern itself: UMD significant only in the liquid group. Herding and feedback are cited from other papers (refs 13, 15), not tested here | p. 2, 4, 6 |
+| 2 | Illiquid coins show a mean reversion effect, in line with Wei (2018) | Illiquid losers 1.07% vs illiquid winners 0.53% a day; UMD in illiquid coins -0.33%, not significant | p. 3-4, Table 1 |
+| 3 | An illiquidity premium exists within last period's losers | IML among losers 0.52% a day, significant at 5% | p. 2-3, Table 1 |
+
+Motivation: stronger momentum in liquid market states in international equities (ref. 12, p. 1).
 
 **Caveats raised by the authors**
-- Illiquid losers may do worse in practice: they sit in the least liquid coins, where bid-ask costs may be much higher (p. 5).
-- Shorting is limited in crypto, which is why long-only variants are studied (p. 4).
-- Figure 2 assumes zero trading costs and zero market impact (p. 5).
+- The illiquid losers portfolio sits in the most illiquid coins, where indirect costs from the bid-ask spread may be much higher (p. 5).
 
-**Ruled out**: Not stated by the authors.
+**Ruled out**
+- Nothing is ruled out.
 
 ## 2. Strategy, brick by brick
 
 | Brick | Paper | Where |
 | --- | --- | --- |
-| Universe | Daily market cap, price and volume from coinmarketcap.com. Stablecoins removed. A coin enters if it existed for at least T(c) = 26 weeks and its market cap was never below M(c) = 10^6 USD over that window. 711 coins qualified at least once. | p. 2 |
-| Period | Jan 2015 to Jan 2019. Earlier years have few coins and little trading. | p. 2 |
-| Signal, momentum | Cumulative return over Tmom = 14 days. Losers: lowest 30%. Neutral: 30% to 70%. Winners: highest 30%. | p. 3 |
-| Signal, liquidity | Amihud illiquidity over Tilliq = 14 days, from daily volume in USD. Liquid: lowest 30%. Neutral: middle. Illiquid: highest 30%. | p. 3 |
-| Portfolios | 9 cells (3 x 3). Equal weight. Zero-investment UMD (winners minus losers) per liquidity class. Zero-investment IML (illiquid minus liquid) per momentum class. | p. 3 |
-| Long-only variants | Illiquid losers and liquid winners. | p. 4 |
-| Horizon, rebalancing | Every 14 days. | p. 3 |
-| Benchmark | Cap-weighted portfolio of all coins that pass the filter at the rebalance, rebalanced every 14 days. | p. 3 |
-| Costs | Table 2 grid: 0, 10, 50, 100 bps. How they are applied (per side, per rebalance, on turnover) is not stated. | p. 5 |
+| Universe | Coins listed on coinmarketcap.com, stablecoins removed. At each date: listed for at least T(c) = 26 weeks, and market cap never below M(c) = $1 million over those 26 weeks. 711 coins qualify at least once | p. 2 |
+| Period | January 2015 to January 2019; earlier years have few coins and little trading | p. 2 |
+| Signal | Momentum: cumulative price return over Tmom = 14 days, no skip. Illiquidity: Amihud measure over Tilliq = 14 days | Eq. 1-2, p. 3 |
+| Groups | Each measure split at the 30th and 70th percentiles: losers / neutral / winners; liquid / neutral / illiquid. 9 portfolios. Whether the two sorts are independent or sequential is not stated | p. 3 |
+| Spreads | UMD = winners minus losers within each illiquidity group; IML = illiquid minus liquid within each momentum group. Zero-investment | p. 3 |
+| Long-only strategies | Illiquid losers; liquid winners | p. 4-5 |
+| Horizon | Hold 14 days | p. 3 |
+| Sizing | Equal weight within each portfolio | p. 3 |
+| Rebalancing | Every 14 days. Drift between rebalances not stated | p. 3 |
+| Benchmark | Cap-weighted portfolio of all eligible coins, rebalanced every 14 days | p. 3 |
+| Metric | Mean daily return, daily standard deviation, information ratio vs benchmark, annualised (factor not stated) | Eq. 3, Table 1 |
+| Costs | Gross in Table 1 and Fig. 2. Table 2 charges 10, 50, 100 bps; how the charge is applied (per trade, per turnover, per rebalance) is not stated. Zero market impact assumed | p. 5 |
 
-**Rule** (Eq. 1 and 2, p. 3), for coin i at day t:
+**Rule** (Eq. 1-2, p. 3)
 
-$$C_i(t) = \frac{P_i(t) - P_i(t - T_{mom})}{P_i(t - T_{mom})} \qquad I_i(t) = \frac{1}{T_{illiq}} \sum_{\tau = t - T_{illiq}}^{t} \frac{|R_i(\tau)|}{V_i(\tau)}$$
+$$C_i(t) = \frac{P_i(t) - P_i(t - T_{mom})}{P_i(t - T_{mom})}, \qquad I_i(t) = \frac{1}{T_{illiq}} \sum_{\tau = t - T_{illiq}}^{t} \frac{|R_i(\tau)|}{V_i(\tau)}$$
 
-Information ratio (Eq. 3): IR = E[Rp - Rb] / sqrt(var[Rp - Rb]), with Rb the cap-weighted portfolio. Table captions call it annualized; the factor is not given.
+V is daily traded volume in USD. As printed, the sum runs over Tilliq + 1 days and divides by Tilliq. Liquid winners: top 30% on C and bottom 30% on I, equal weight, held 14 days. Illiquid losers: bottom 30% on C and top 30% on I.
 
-Not stated: whether the two sorts are independent or sequential, any skipped day between signal and holding, how the portfolio return is measured inside the 14-day holding period.
-
-**Data provenance**: one source, coinmarketcap.com, daily. Coin count grows from ≈15 in 2015-2016 to ≈70 by mid-2017 and ≈540 at the peak near the end of 2018, ≈490 at the end of the sample (Fig. 1). Treatment of delisted coins and of reported volume quality is not stated.
+**Data provenance** (p. 2)
+- Daily market cap, price and volume from coinmarketcap.com. Exchange coverage, price definition and treatment of delisted coins not stated.
+- Number of eligible coins: ≈ under 20 through 2016, ≈ 100 by early 2018, peak ≈ 540 in late 2018, ≈ 490 at the end (≈ Fig. 1).
 
 ## 3. Results
 
-All results are real data, in-sample, gross unless stated. No out-of-sample split. Returns are mean daily returns in %.
+All real data, in-sample, one specification, Jan 2015 to Jan 2019. Daily figures in %.
 
-**Aggregate** (Table 1, 9 cells)
+**Aggregate** (Table 1, gross)
+- UMD among liquid coins: 0.26% a day, significant at 5% (two-tailed t-test); sd 5.10%; IR 0.22.
+- IML among losers: 0.52% a day, significant; sd 5.05%; IR 1.05.
+- No t-statistic or p-value is printed, only asterisks (Table 1).
 
-| Metric | Value | Where |
+**By sub-group** (Table 1, gross)
+- Cell means range from 0.31% (liquid losers) to 1.07% (illiquid losers). IRs range from 0.55 (liquid losers) to 2.49 (illiquid losers).
+- Standard deviation is highest among illiquid coins (7.36% to 9.45%) and among winners (p. 4).
+- UMD by illiquidity group: liquid 0.26%*, neutral -0.06%, illiquid -0.33%.
+- IML by momentum group: losers 0.52%*, neutral 0.16%, winners -0.07%.
+- Where it does not work: momentum is negative in neutral and illiquid coins; illiquidity premium is negative among winners. Both not significant.
+
+**Long-only strategies, with costs** (Table 2)
+
+| Cost (bps) | Illiquid losers: mean / sd / IR | Liquid winners: mean / sd / IR |
 | --- | --- | --- |
-| Best cell, mean | Illiquid losers 1.07, IR 2.49 | Table 1 |
-| Worst cell, mean | Liquid losers 0.31, IR 0.55 | Table 1 |
-| Highest standard deviation | Illiquid winners 9.45 | Table 1 |
-| Lowest standard deviation | Neutral momentum, liquid 5.18 | Table 1 |
-| Significant at 5% (two-tailed t-test) | Only two cells: IML among losers (0.52) and UMD among liquid coins (0.26). No t-statistics printed. | Table 1; p. 3 |
+| 0 | 1.07 / 7.79 / 2.49 | 0.71 / 7.43 / 1.59 |
+| 100 | 0.95 / 7.79 / 2.16 | 0.60 / 7.45 / 1.27 |
 
-**By sub-group** (Table 1)
+10 and 50 bps lie between (Table 2).
 
-| Sort | Values (mean, % daily) | Where |
-| --- | --- | --- |
-| UMD, liquid / neutral / illiquid | 0.26* / -0.06 / -0.33 | Table 1 |
-| IML, losers / neutral / winners | 0.52* / 0.16 / -0.07 | Table 1 |
-| Losers, liquid / neutral / illiquid | 0.31 / 0.56 / 1.07 | Table 1 |
-| Winners, liquid / neutral / illiquid | 0.71 / 0.42 / 0.53 | Table 1 |
-| Neutral, liquid / neutral / illiquid | 0.37 / 0.68 / 0.66 | Table 1 |
+**Over time** (Fig. 2, log scale, gross, no costs)
+- All three portfolios stay ≈ near their start until ≈ mid 2015.
+- Illiquid losers peak ≈ 10^6 around Jan 2018; liquid winners ≈ 10^4.5; cap-weighted ≈ 10^1.5.
+- All three fall from ≈ Jan 2018 to the end. Peak to end, ≈ -80% (illiquid losers), ≈ -95% (liquid winners), ≈ -83% (cap-weighted) (computed from chart readings, rough).
+- No drawdown, Sharpe ratio or yearly figure is given in a table.
 
-- Standard deviations are higher for illiquid coins and generally higher for winners (p. 4).
-- IR by cell ranges from -0.55 (IML winners) to 2.49 (illiquid losers). UMD IR: 0.22 liquid, -0.71 neutral, -1.08 illiquid (Table 1). The paper does not say how an IR is defined for a zero-investment portfolio.
+**Horizon and parameters**
+- Not addressed. Only Tmom = Tilliq = 14 days, 30/70 breakpoints, T(c) = 26 weeks and M(c) = $1 million are shown. No other value is tested.
 
-**Costs** (Table 2, long-only, mean daily return and IR)
-
-| Costs (bps) | Illiquid losers E[R] / IR | Liquid winners E[R] / IR |
-| --- | --- | --- |
-| 0 | 1.07 / 2.49 | 0.71 / 1.59 |
-| 100 | 0.95 / 2.16 | 0.60 / 1.27 |
-
-Standard deviation: 7.79 for illiquid losers at every cost level; 7.43 for liquid winners, 7.45 at 100 bps. Table 2 gives rows for 10 and 50 bps.
-
-**Horizon and parameters**: one setting only (14-day momentum, 14-day illiquidity, 14-day rebalance, 30% cutoffs, 26 weeks, 1 million USD). Not addressed.
-
-**Over time** (Fig. 2, log scale, ≈ values; y-unit not stated, curves start near 10^0)
-- All three curves are flat or below 10^0 until ≈ early 2015.
-- All three peak ≈ Jan 2018 and fall through 2018 (no figure given in the text).
-- Peak ≈2 x 10^6 (illiquid losers), ≈4 x 10^4 (liquid winners), ≈50 (cap-weighted).
-- End ≈4 x 10^5, ≈2 x 10^3 and ≈8. Figure 2 is without costs and market impact.
-
-**Link to other strategies**: only the cap-weighted benchmark. No factor regressions.
+**Link to other strategies**
+- None beyond the cap-weighted benchmark.
 
 **Inconsistencies in the source**
-- The text refers to "Table 3" for both the bivariate sorts (p. 3) and the costs (p. 5). The captions are Table 1 and Table 2.
-- IML and UMD cells differ from the differences of the printed means (computed from Table 1):
-
-| Cell | Computed difference | Printed |
-| --- | --- | --- |
-| IML losers | 1.07 - 0.31 = 0.76 | 0.52 |
-| IML neutral | 0.66 - 0.37 = 0.29 | 0.16 |
-| IML winners | 0.53 - 0.71 = -0.18 | -0.07 |
-| UMD liquid | 0.71 - 0.31 = 0.40 | 0.26 |
-| UMD neutral | 0.42 - 0.56 = -0.14 | -0.06 |
-| UMD illiquid | 0.53 - 1.07 = -0.54 | -0.33 |
-
-  Printed values used. The paper gives no reason.
-- Figure 2 starts in Jul 2014; the text restricts the data to Jan 2015 to Jan 2019 (p. 2).
+- The text cites "Table 3" for the 3x3 sorts (p. 3) and for the cost table (p. 5). The tables are numbered 1 and 2; there is no Table 3.
+- Printed spreads differ from the difference of printed cell means (computed): IML losers 0.52 vs 1.07 - 0.31 = 0.76; UMD liquid 0.26 vs 0.71 - 0.31 = 0.40; UMD illiquid -0.33 vs -0.54. All six spreads are smaller in size than the computed differences. The paper does not say whether spreads use a different sample of days.
+- Fig. 2 starts in Jul 2014 and Fig. 1 before Jan 2015, while the text restricts the data to Jan 2015 - Jan 2019 (p. 2).
 
 ## 4. Claims without evidence shown
 
 | Claim | Where |
 | --- | --- |
-| Momentum is "strong" in the most liquid coins (abstract). Only one cell is significant, at 5%. | p. 1, Table 1 |
-| Momentum is explained by herding and positive feedback. No herding measure is used. | p. 4 |
-| Liquid winners "should be much less exposed" to bid-ask costs. No spread data. | p. 5 |
-| Both long-only strategies keep improved risk-adjusted performance "even when transaction costs are included". The benchmark's own statistics are not printed. | p. 6, Table 2 |
+| The inclusion rules keep the most relevant and liquid coins, as a realistic investor would | p. 2 |
+| $1 million is small enough to avoid any large-cap bias | p. 2 |
+| Liquid winners should be much less exposed to bid-ask costs in practice | p. 5 |
+| Herding explains momentum in liquid coins | p. 4, 6 |
+| Shorting opportunities in crypto are limited | p. 4 |
 
 ## 5. Techniques
 
 | # | Technique | Kind | Brick | Why (author) | Where |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [[Cross-sectional momentum]]: 14-day cumulative return, 30 / 40 / 30 split | technique | signal | Not argued | p. 3 |
-| 2 | [[Amihud illiquidity]] over 14 days, same window as momentum | technique | signal | Not argued | p. 3 |
-| 3 | [[Bivariate portfolio sort]]: 3 x 3 momentum-liquidity | technique | evaluation | To study how momentum interacts with liquidity | p. 1, 3 |
-| 4 | [[Minimum age and market cap filter]]: age of at least 26 weeks, market cap never below 1 million USD over that window | technique | universe | Keeps relevant and liquid coins, as a realistic investor would. Small floor avoids a large-cap bias | p. 2 |
-| 5 | Stablecoins removed | technique | universe | They are pegged to fiat or commodities | p. 2 |
-| 6 | Equal weight, 14-day rebalance | technique | sizing | Not argued | p. 3 |
-| 7 | Zero-investment UMD and IML inside each bracket | technique | evaluation | Not argued | p. 3 |
-| 8 | Information ratio against a cap-weighted portfolio rebuilt at each rebalance | technique | evaluation | Not argued | p. 3 |
-| 9 | Long-only legs of the sort | technique | entry | Limited shorting in crypto | p. 4 |
-| 10 | Cost sensitivity grid, 0 to 100 bps | technique | evaluation | Not argued | p. 5 |
+| 1 | Rank on 14-day return, top 30% vs bottom 30%, held 14 days. Card: [[Cross-sectional momentum]] | technique | signal | Not argued | Eq. 1, p. 3 |
+| 2 | Amihud illiquidity over 14 days as a second sort; momentum and reversal read within liquidity groups; long-only liquid winners and illiquid losers. Card: [[Liquidity-conditioned momentum]] | technique | signal | Momentum may be stronger in liquid states; shorting is limited | p. 1, 3-4 |
+| 3 | 3x3 bivariate sort with spreads per row and column. Card: [[Conditional double sort]] | technique | evaluation | Tests whether momentum and illiquidity are pervasive | p. 3 |
+| 4 | Minimum age 26 weeks and minimum market cap $1 million over that window, stablecoins removed. Card: [[Minimum price and size filter]] | technique | universe | Keeps relevant, liquid coins; avoids large-cap bias | p. 2 |
+| 5 | Results at 0, 10, 50, 100 bps of cost. Card: [[Break-even transaction cost]] | technique | evaluation | Shows the strategies remain profitable with costs | p. 5 |
+| 6 | Information ratio against a cap-weighted portfolio of the same eligible universe, same rebalancing | technique | evaluation | Risk-adjusted performance vs the market | Eq. 3, p. 3 |
+| 7 | Equal weight, rebalanced every 14 days | technique | sizing | Not argued | p. 3 |
 
 ## 6. Regime observations
 
-Not discussed by the authors. The chart shows a rise to ≈ Jan 2018 and a fall after it for all three portfolios (Fig. 2). The number of coins grows from ≈15 to ≈540 over the sample (Fig. 1).
+- Eligible coins grow from ≈ under 20 to ≈ 540; most of the growth comes from late 2017 (≈ Fig. 1).
+- All portfolios peak ≈ Jan 2018 and decline through 2018 (≈ Fig. 2).
+- No split of results by sub-period.
 
 ## 7. Acknowledged limits
 
-- Shorting is limited in crypto markets (p. 4).
-- Illiquid losers may suffer higher indirect costs in practice (p. 5).
-- Figure 2 ignores costs and market impact (p. 5).
-- Years before 2015 excluded for few coins and little trading (p. 2).
+- Illiquid losers performance "may additionally deteriorate in practice" through bid-ask costs (p. 5).
+- Fig. 2 assumes no trading costs and zero market impact (p. 5).
 
 ## 8. Not addressed
 
-- Robustness to the 14-day windows, the 30% cutoffs, T(c) and M(c). How they were chosen is not stated.
-- Turnover, cost application, bid-ask spreads, capacity, market impact.
-- Number of coins per portfolio, especially in 2015-2016 when ≈15 coins qualify (Fig. 1).
-- Drawdowns, benchmark statistics, t-statistics, factor regressions.
-- Out-of-sample testing, delisted coins, volume data quality.
-- Independent or sequential sorting, timing of signal and holding.
+- Number of coins per portfolio and per period, turnover.
+- How costs are charged; bid-ask spreads and slippage measured on real data.
+- Survivorship: whether dead or delisted coins remain in the coinmarketcap data.
+- Any parameter other than the one set shown; any out-of-sample period.
+- t-statistics, Sharpe ratios, drawdowns, results by sub-period.
+- Exposure to the market or to other factors; capacity.
+- Shorting or perpetual futures; which exchanges the prices come from.
+- Execution price and timing at each rebalance.
