@@ -22,8 +22,6 @@ data/crypto/raw/, so a second run only downloads the months it does not have yet
 Usage, from the repository root:
     python data/get_crypto_daily.py                              # full build
     python data/get_crypto_daily.py --symbols BTCUSDT,ETHUSDT    # quick test on two names
-    python data/get_crypto_daily.py --check                      # compare with data/fingerprints/crypto_daily.json
-    python data/get_crypto_daily.py --write-fingerprint          # after a build you trust
 
 Mark price: Binance computes it from an index of spot exchanges and uses it for liquidations and unrealised
 P&L. It ignores the wicks of a single order book, so signals, risk and liquidation checks are built on it; the
@@ -33,7 +31,7 @@ Source: Binance Vision public datasets (https://data.binance.vision), licensed C
 Binance Vision Dataset Terms. You download it yourself, for your own non-commercial research and
 backtesting. It is not redistributed here.
 """
-import argparse, hashlib, io, json, re, time, zipfile
+import argparse, io, re, time, zipfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -49,7 +47,6 @@ MARK = "data/futures/um/monthly/markPriceKlines/{s}/1d/"
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "crypto"
 RAW = OUT / "raw"
-FINGERPRINT = ROOT / "data" / "fingerprints" / "crypto_daily.json"
 START, END = "2020-01-01", "2026-09-30"          # fixed, so that every user builds the same data; the archive starts in 2020-01
 DAILY_KLINES = "data/futures/um/daily/klines/{s}/1d/{s}-1d-{d:%Y-%m-%d}.zip"
 DAILY_MARK = "data/futures/um/daily/markPriceKlines/{s}/1d/{s}-1d-{d:%Y-%m-%d}.zip"
@@ -166,17 +163,6 @@ def multiplier(symbol):
 
 # ---------- checks ----------
 
-def frame_hash(df):
-    return hashlib.sha256(pd.util.hash_pandas_object(df, index=False).values.tobytes()).hexdigest()[:16]
-
-
-def fingerprint(daily, fund):
-    return {"start": START, "end": END,
-            "daily_rows": len(daily), "funding_rows": len(fund), "symbols": int(daily["symbol"].nunique()),
-            "symbols_by_year": {str(y): int(n) for y, n in daily.groupby(daily["date"].dt.year)["symbol"].nunique().items()},
-            "daily_hash": frame_hash(daily), "funding_hash": frame_hash(fund)}
-
-
 def quality_report(daily, fund, meta, repairs):
     d = daily.sort_values(["symbol", "date"])
     ret = d.groupby("symbol")["close"].pct_change()
@@ -281,23 +267,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--symbols", help="comma-separated list, for a quick test; default: every USDT perp ever listed")
     ap.add_argument("--workers", type=int, default=12, help="parallel downloads; keep it moderate (Binance rate limits)")
-    ap.add_argument("--check", action="store_true", help="compare the files in data/crypto/ with the fingerprint")
-    ap.add_argument("--write-fingerprint", action="store_true", help="save the fingerprint of the files in data/crypto/")
     args = ap.parse_args()
-
-    if args.check or args.write_fingerprint:
-        fp = fingerprint(pd.read_parquet(OUT / "perps_daily.parquet"), pd.read_parquet(OUT / "perps_funding.parquet"))
-        if args.write_fingerprint:
-            FINGERPRINT.parent.mkdir(parents=True, exist_ok=True)
-            FINGERPRINT.write_text(json.dumps(fp, indent=2))
-            print(f"Fingerprint saved to {FINGERPRINT}")
-        else:
-            ref = json.loads(FINGERPRINT.read_text())
-            diff = {k: (ref.get(k), v) for k, v in fp.items() if ref.get(k) != v}
-            print("Same data as the reference." if not diff else "Differences (reference, yours):")
-            for k, (a, b) in diff.items():
-                print(f"  {k}: {a} | {b}")
-        return
 
     t0, start, end = time.time(), pd.Timestamp(START), pd.Timestamp(END)
     month = lambda key: pd.Timestamp(key[-11:-4] + "-01")

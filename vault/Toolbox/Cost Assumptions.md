@@ -13,19 +13,18 @@ updated: 2026-10-25
 | Crypto perps, Binance USDT, top names | 5 bp | Crypto XS Momentum sheet | The tail of the universe costs more |
 | FX majors, spot | real bid/ask from minute data | FOMC Drift sheet | Spreads widen around announcements; a flat cost understates AUD and NZD |
 | Futures | to fill | | |
-| ETFs, very liquid (SPY, QQQ, IWM, EFA, EEM, TLT, IEF, SHY, LQD, HYG, GLD) | 2 bp | confirmed by Lucas 2026-10-25 | Half spread about 0.5 to 1 bp plus commission and slippage at the close; trades at the close (auction) |
-| ETFs, others (EWJ, VGK, FXI, TIP, VNQ, SLV, DBC, USO, DBA, UUP, FXE, FXY) | 5 bp | confirmed by Lucas 2026-10-25 | Wider spreads; DBA, FXY and UUP are the thinnest. Stress at 2x |
+| ETFs | 2 to 15 bp, by liquidity tier (below) | confirmed by Lucas 2026-10-25 | Very liquid ETFs (SPY, QQQ, TLT, IEF...) are T1, 2 bp: half spread about 0.5 to 1 bp plus commission and slippage at the close |
 
 ## ETF financing
 
 | Item | Cost | Source | Note |
 | --- | --- | --- | --- |
-| Short borrow, liquid ETFs | 25 bp a year | confirmed by Lucas (Desk log 2026-10-25) | Hard-to-borrow names cost more: none in the 23 |
+| Short borrow, liquid ETFs | 25 bp a year | confirmed by Lucas (Desk log 2026-10-25) | Hard-to-borrow names cost more |
 | Leverage above 1x | T-bill + 50 bp a year | desk estimate, to confirm by Lucas | Stress at T-bill + 150 bp (a retail broker's rate) |
 
-## ETF extended (203 ETFs): cost tiers by era
+## ETFs: cost tiers by era
 
-Proposed by the Data seat 2026-10-25; T1 to T4 confirmed by Lucas 2026-10-25. The 23-ETF lines above keep their own costs. Tier of an ETF at date t = median daily dollar volume of the previous calendar year (`data/etf/etf_extended_liquidity.csv`, USD million), so the tier is point in time and an ETF moves between tiers as it grows. No volume yet (launch year) = not tradable.
+Proposed by the Data seat 2026-10-25; T1 to T4 confirmed by Lucas 2026-10-25. Tier of an ETF at date t = median daily dollar volume of the previous calendar year (`data/etf/etf_liquidity.csv`, USD million), so the tier is point in time and an ETF moves between tiers as it grows. No volume yet (launch year) = not tradable.
 
 | Tier | Median $ volume, prior year | Cost, one way | Source | Note |
 | --- | --- | --- | --- | --- |

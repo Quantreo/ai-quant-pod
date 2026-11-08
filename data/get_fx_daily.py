@@ -11,13 +11,11 @@ vault/Toolbox/Cost Assumptions.md. Interest rates for carry are in data/get_rate
 
 Usage, from the repository root:
     python data/get_fx_daily.py
-    python data/get_fx_daily.py --check               # compare with data/fingerprints/fx_daily.json
-    python data/get_fx_daily.py --write-fingerprint   # after a build you trust
 
 Data source: FRED, Federal Reserve Bank of St. Louis (https://fred.stlouisfed.org), series from the Federal
 Reserve's H.10 release. You download it yourself; FRED's terms of use apply.
 """
-import argparse, hashlib, io, json, time
+import argparse, io, time
 from pathlib import Path
 
 import pandas as pd
@@ -28,7 +26,6 @@ SERIES = {"EURUSD": "DEXUSEU", "GBPUSD": "DEXUSUK", "AUDUSD": "DEXUSAL", "NZDUSD
 URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series}"
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "fx"
-FINGERPRINT = ROOT / "data" / "fingerprints" / "fx_daily.json"
 START, END = "2008-01-01", "2026-09-30"          # fixed, so that every user builds the same data
 
 
@@ -43,11 +40,6 @@ def download(session, series, tries=5):
         except requests.RequestException:
             time.sleep(1 + 2 * k)
     raise RuntimeError(f"failed after {tries} tries: {series}")
-
-
-def fingerprint(fx):
-    return {"start": START, "end": END, "rows": len(fx), "rows_by_pair": {p: int(n) for p, n in fx.groupby("pair").size().items()},
-            "hash": hashlib.sha256(pd.util.hash_pandas_object(fx, index=False).values.tobytes()).hexdigest()[:16]}
 
 
 def quality_report(fx):
@@ -69,23 +61,7 @@ def quality_report(fx):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--check", action="store_true")
-    ap.add_argument("--write-fingerprint", action="store_true")
     args = ap.parse_args()
-
-    if args.check or args.write_fingerprint:
-        fp = fingerprint(pd.read_parquet(OUT / "fx_daily.parquet"))
-        if args.write_fingerprint:
-            FINGERPRINT.parent.mkdir(parents=True, exist_ok=True)
-            FINGERPRINT.write_text(json.dumps(fp, indent=2))
-            print(f"Fingerprint saved to {FINGERPRINT}")
-        else:
-            ref = json.loads(FINGERPRINT.read_text())
-            diff = {k: (ref.get(k), v) for k, v in fp.items() if ref.get(k) != v}
-            print("Same data as the reference." if not diff else "Differences (reference, yours):")
-            for k, (a, b) in diff.items():
-                print(f"  {k}: {a} | {b}")
-        return
 
     with requests.Session() as s:
         fx = pd.concat([download(s, sid).assign(pair=p) for p, sid in SERIES.items()], ignore_index=True)

@@ -19,5 +19,7 @@ Long the coins with the smallest recent extreme up day, hedged with the equal-we
 | Economist | 2026-11-06 | Go | [[Pass 1]] |
 | Critic | 2026-11-06 | Revise | [[Review]] |
 | Economist | 2026-11-06 | Go (v2, 3 fixed, 4 partly) | [[Pass 1]] |
+| Data | 2026-11-08 | Ready with reserves | [[Data check]] |
+| Developer | 2026-11-08 | Gate failed (price-only net 0.24) | [[Build]] |
 
 [[Changelog]]

@@ -17,5 +17,7 @@ Trend on government bond ETFs, net of an ex-ante drift: pays only if bond holder
 | Seat | Date | Verdict | File |
 | --- | --- | --- | --- |
 | Economist | 2026-11-06 | Go | [[Pass 1]] |
+| Data | 2026-11-08 | Ready with reserves | [[Data check]] |
+| Developer | 2026-11-08 | Gate failed (net Sharpe -0.27) | [[Build]] |
 
 [[Changelog]]
