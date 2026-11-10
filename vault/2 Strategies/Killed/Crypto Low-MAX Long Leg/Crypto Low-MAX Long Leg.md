@@ -4,7 +4,7 @@ name: Crypto Low-MAX Long Leg
 family: low-vol
 asset: crypto
 horizon: weekly
-status: reviewed
+status: killed
 version: v2
 stage: short
 idea: "[[Idea Journal]] · 2026-11 · Long-only low-MAX crypto basket"

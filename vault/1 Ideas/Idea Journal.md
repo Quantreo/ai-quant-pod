@@ -13,6 +13,16 @@ type: journal
 
 The entries marked **new** or **reading** are open: nobody has built them. Pick one, and it is yours.
 
+### 2026-11 · Multi-asset ETFs: 12-month time-series trend
+Investors under-react to news and chase it later, so an asset's own 12-month excess return predicts its next month. [source: Moskowitz 2012, p. 245, 248-249]
+- **Operator**: transpose
+- **What's new**: Moskowitz 2012 traded 58 futures → the same rule on 22 liquid ETFs across four classes, with ETF costs and borrow.
+- **Bricks**: [[Time-series momentum signal]] applied to [[Always-long benchmark comparison]]
+- **Evidence**: 12/1 is the best cell, t 6.61 (Moskowitz 2012, Table 2A); alpha over always-long significant for only 26% of contracts (p. 236). Flat since 2011 (Lempérière 2014, Fig. 6).
+- **First kill**: net Sharpe on train under the t 2 bar after costs and borrow.
+- **Data**: ETF daily and T-bill from the repo; have it.
+`trend` · [[2012 - Moskowitz Ooi Pedersen - Time Series Momentum]] · **sheet** · [[ETF TSMOM 12-Month]]
+
 ### 2026-11 · FX currency momentum with a no-trade band
 Currencies under-react to news and then over-react, with limits to arbitrage; the band cuts the spread cost that eats the edge. [source: Menkhoff 2011, p. 27-29]
 - **Operator**: swap

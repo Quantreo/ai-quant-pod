@@ -4,7 +4,7 @@ name: Bond Trend Demeaned
 family: trend
 asset: rates
 horizon: monthly
-status: pipeline
+status: killed
 version: v1
 stage: short
 idea: "[[Idea Journal]] · 2026-11 · Bond trend on demeaned returns"

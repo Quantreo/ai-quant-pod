@@ -13,7 +13,9 @@ updated: 2026-10-25
 | Crypto perps, Binance USDT, top names | 5 bp | Crypto XS Momentum sheet | The tail of the universe costs more |
 | FX majors, spot | real bid/ask from minute data | FOMC Drift sheet | Spreads widen around announcements; a flat cost understates AUD and NZD |
 | Futures | to fill | | |
-| ETFs | 2 to 15 bp, by liquidity tier (below) | confirmed by Lucas 2026-10-25 | Very liquid ETFs (SPY, QQQ, TLT, IEF...) are T1, 2 bp: half spread about 0.5 to 1 bp plus commission and slippage at the close |
+| ETFs, core list, very liquid: SPY, QQQ, IWM, EFA, EEM, TLT, IEF, SHY, LQD, HYG, GLD | 2 bp | confirmed by Lucas 2026-10-25 | Half spread about 0.5 to 1 bp plus commission and slippage at the close |
+| ETFs, core list, liquid: EWJ, VGK, FXI, TIP, VNQ, SLV, DBC, USO, DBA, UUP, FXE, FXY | 5 bp | confirmed by Lucas 2026-10-25 | Flat over the whole history |
+| ETFs, all others | 2 to 15 bp, by liquidity tier (below) | confirmed by Lucas 2026-10-25 | Very liquid ETFs (SPY, QQQ, TLT, IEF...) are T1, 2 bp: half spread about 0.5 to 1 bp plus commission and slippage at the close |
 
 ## ETF financing
 

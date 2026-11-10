@@ -1,0 +1,24 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{microtype,booktabs,graphicx,xcolor,float}
+\usepackage[labelsep=colon,font=small,labelfont=bf]{caption}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=black]{hyperref}
+\IfFileExists{titlesec.sty}{\usepackage{titlesec}\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}}{}
+\setlength{\parindent}{0pt}\setlength{\parskip}{0.55em}
+\definecolor{brick}{HTML}{96282B}
+\begin{document}
+\begin{center}
+{\LARGE <<TITLE>>}\\[0.6em]
+Strategy report \quad·\quad Research desk \quad·\quad <<DATE>>\\[0.4em]
+{\small\textit{<<STATUS>>}}
+\end{center}
+\vspace{0.4em}
+\begin{abstract}
+\noindent <<ABSTRACT>>
+\end{abstract}
+
+<<BODY>>
+
+\vfill
+{\footnotesize\color{gray} <<FOOTER>>}
+\end{document}

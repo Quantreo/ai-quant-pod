@@ -1,5 +1,5 @@
 """
-ETF TSMOM 12-Month: built from Pass 1 v1 of vault/2 Strategies/Proposed/ETF TSMOM 12-Month/Pass 1.md and its Data check.
+ETF TSMOM 12-Month: built from Pass 1 v1 (short) of vault/2 Strategies/Pipeline/ETF TSMOM 12-Month/Pass 1.md and its Data check.
 
 Month-end book on 22 ETFs (SHY out): long the ETFs whose own 12-month excess return is positive, short the others, sized
 s_i / sigma_i (EWMA com 60), scaled to 8% ex-ante vol (261-day covariance), gross cap 2. Excess return = adj_close return
@@ -7,11 +7,11 @@ minus cash (FRED TB3MS, Data check #1: signal uses cash months up to m-1). The P
 is financed (long) or credited (short) at the T-bill rate, through the engine's funding path; shorts also pay a borrow fee.
 
 Variants: base; control_long (all signs +1, same sizing); control_twin (every ETF takes the sign of the equal-risk basket's
-12-month excess return) = the two same-sized controls of G1. stress13 / stress9 (Data check #3) are coded but belong to
-the validation phase: not run at the gate.
+12-month excess return): the two same-sized controls, reported as labels at the gate (Pass 1 1.11), never a kill there.
+stress13 / stress9 (Data check #3) and A belong to the validation phase: not run at the gate.
 
     poetry run python strategies/etf_tsmom_12m.py --check-lookahead
-    poetry run python strategies/etf_tsmom_12m.py --gate        # base + two controls (train), then G1 and G2
+    poetry run python strategies/etf_tsmom_12m.py --gate        # base + two controls (train), then the level gate and the labels
 
 Costs per ETF by tier (1.5, Cost Assumptions): the engine has one cost_bp, so one engine run per tier group, added
 (the engine is linear per name, no band), as FX Value did. Never a blended average.
@@ -49,7 +49,7 @@ COV_WINDOW = 261                               # 1.5 Book
 COV_MIN_OBS = 240                              # not in Pass 1: pairwise covariance needs this many common days
 VOL_TARGET, GROSS_CAP = 0.08, 2.0              # 1.5 / 1.5b
 PPY = 252                                      # annualisation of volatility
-BORROW = 0.0025                                # 1.5 Borrow v1.3: 25 bp a year on short gross, all ETFs (confirmed; 0.5% superseded), /365
+BORROW = 0.0025                                # 1.5 Borrow: 25 bp a year on short gross, all ETFs (Cost Assumptions), /365
 
 VARIANTS = ["base", "control_long", "control_twin", "stress13", "stress9", "A"]
 # 1.4 / 1.9 classes (VNQ counts with equities: equities 9, bonds 5, commodities 5, FX 3)
@@ -58,7 +58,7 @@ CLASS = {**{c: "equity" for c in "SPY QQQ IWM EFA EEM EWJ VGK FXI VNQ".split()},
 
 # 1.11 gate
 SCORED_FIRST_MONTH = "2006-02"                 # month of the first scored return (the first trade is 2006-01-31)
-G1_BAR, G2_T_BAR = 2.0, 2.0
+T_BAR = 2.0                                    # level gate: t 2, the train is over 5 years (method 1.11)
 
 
 # ---------------------------------------------------------------- data
@@ -177,7 +177,7 @@ def tiered_backtest(w, bars, cash, end, borrow_rate=BORROW, cost_mult=1.0):
     for col in ["traded", "gross", "net", "names_long", "names_short"]:
         trades[col] = sum(p.trades[col] for p in parts)
     pos = pd.concat([p.positions for p in parts], axis=1)
-    # borrow: 0.5% a year on short gross, per calendar day, charged as a cost
+    # borrow: BORROW a year on short gross, per calendar day, charged as a cost
     short = (-pos.clip(upper=0.0))
     borrow = short * borrow_rate / 365
     daily["cost"] = daily["cost"] - borrow.sum(axis=1).reindex(daily.index).fillna(0.0)
@@ -215,7 +215,10 @@ def run(period, variant="base", cost_bp=None, delay=0, open_test=False, borrow_r
     days = rebalance_days(price_days, start, end_ts)
     w = build_weights(bars, cash, days, variant)
     if delay:
-        w = delay_test(w, delay)
+        # 1.5b delay stress: signal at close d, trade at the next trading close. lab delay_test shifts calendar days
+        # (weekend dates, run 103909 turnover 14), so the shift is on the price calendar here.
+        pos = price_days.searchsorted(w.index) + delay
+        w = w.set_axis(price_days[np.minimum(pos, len(price_days) - 1)])
     res, tier, traded, borrow = tiered_backtest(w, bars, cash, end_ts, borrow_rate, cost_mult)
     m = monthly_net(res)
     names = w.notna().sum(axis=1)
@@ -234,7 +237,7 @@ def run(period, variant="base", cost_bp=None, delay=0, open_test=False, borrow_r
     return folder, s, params
 
 
-# ---------------------------------------------------------------- gate 1.11
+# ---------------------------------------------------------------- train gate, Pass 1 1.11
 def nw_ols(y, X, lags):
     """OLS y = a + X b with Newey-West (Bartlett) standard errors; t of the intercept."""
     X = np.column_stack([np.ones(len(y)), X])
@@ -256,17 +259,16 @@ def gate(f_base, f_long, f_twin):
     n = len(j)
     lags = int(np.floor(4 * (n / 100) ** (2 / 9)))                  # standard Newey-West rule; Pass 1 gives no lag
     y = j["b"].to_numpy()
-    g1 = {"n_months": n, "lags": lags,
+    labels = {"n_months": n, "lags": lags,
           "on_always_long": nw_ols(y, j[["l"]].to_numpy(), lags), "on_twin": nw_ols(y, j[["t"]].to_numpy(), lags),
           "on_both": nw_ols(y, j[["l", "t"]].to_numpy(), lags)}
-    g1["t_lag1"] = {k: nw_ols(y, j[c].to_numpy(), 1)["t_nw"] for k, c in [("always_long", ["l"]), ("twin", ["t"]), ("both", ["l", "t"])]}
-    g1["pass"] = bool(all(g1[k]["t_nw"] >= G1_BAR for k in ["on_always_long", "on_twin", "on_both"]))   # strictest reading
+    labels["t_lag1"] = {k: nw_ols(y, j[c].to_numpy(), 1)["t_nw"] for k, c in [("always_long", ["l"]), ("twin", ["t"]), ("both", ["l", "t"])]}
     years = n / 12
     sh = float(y.mean() / y.std(ddof=1) * np.sqrt(12))
-    g2 = {"scored_start": str(j.index.min()), "scored_end": str(j.index.max()), "n_months": n, "years": round(years, 3),
-          "net_sharpe_monthly": round(sh, 3), "t": round(sh * np.sqrt(years), 2), "sharpe_bar": round(G2_T_BAR / np.sqrt(years), 3)}
-    g2["pass"] = bool(g2["t"] >= G2_T_BAR)
-    return g1, g2
+    level = {"scored_start": str(j.index.min()), "scored_end": str(j.index.max()), "n_months": n, "years": round(years, 3),
+          "net_sharpe_monthly": round(sh, 3), "t": round(sh * np.sqrt(years), 2), "sharpe_bar": round(T_BAR / np.sqrt(years), 3)}
+    level["pass"] = bool(level["t"] >= T_BAR)                       # the only kill at the gate; labels are reported
+    return level, labels
 
 
 def main():
@@ -275,7 +277,9 @@ def main():
     ap.add_argument("--variant", choices=VARIANTS, default="base")
     ap.add_argument("--check-lookahead", action="store_true", help="truncation test only, no run")
     ap.add_argument("--delay", type=int, default=0, help="control, validation phase")
-    ap.add_argument("--gate", action="store_true", help="base + control_long + control_twin on train, then G1 and G2")
+    ap.add_argument("--cost-mult", type=float, default=1.0, help="stress, 1.9: costs 2x")
+    ap.add_argument("--borrow", type=float, default=BORROW, help="stress, 1.9: borrow 1% = 0.01")
+    ap.add_argument("--gate", action="store_true", help="base + control_long + control_twin on train, then the level gate and the labels")
     a = ap.parse_args()
     start, end = PERIODS[a.period]
     if a.check_lookahead:
@@ -291,11 +295,11 @@ def main():
             out[v] = folder
             print(v, folder.name, {k: s[k] for k in ["gross_sharpe", "net_sharpe", "turnover_per_year", "net_vol_pct", "max_drawdown_pct"]})
             print("  ", p)
-        g1, g2 = gate(out["base"], out["control_long"], out["control_twin"])
-        (out["base"] / "gate.json").write_text(json.dumps({"G1": g1, "G2": g2}, indent=2))
-        print("G1", json.dumps(g1)); print("G2", json.dumps(g2))
+        level, labels = gate(out["base"], out["control_long"], out["control_twin"])
+        (out["base"] / "gate.json").write_text(json.dumps({"level": level, "labels": labels}, indent=2))
+        print("LEVEL", json.dumps(level)); print("LABELS", json.dumps(labels))
         return
-    folder, s, p = run(a.period, a.variant, delay=a.delay)
+    folder, s, p = run(a.period, a.variant, delay=a.delay, borrow_rate=a.borrow, cost_mult=a.cost_mult)
     print(folder); print(s); print(p)
 
 

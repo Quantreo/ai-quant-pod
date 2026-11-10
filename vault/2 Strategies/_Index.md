@@ -10,3 +10,6 @@ type: index
 
 | Strategy | Family | Status | Version | Sharpe net (honest) | Opened | Last decision | Sheet |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| [[Bond Trend Demeaned]] | trend | killed | v1 | -0.27 (train) | 2026-11-08 | 2026-11-08 gate failed | Killed/Bond Trend Demeaned |
+| [[Crypto Low-MAX Long Leg]] | low-vol | killed | v2 | 0.12 (train) | 2026-11-08 | 2026-11-08 gate failed | Killed/Crypto Low-MAX Long Leg |
+| [[ETF TSMOM 12-Month]] | trend | passed | v2 | 0.51 (full sample, t 2.35) | 2026-11-09 | 2026-11-09 test passed, confirms | Passed/ETF TSMOM 12-Month |
