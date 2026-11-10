@@ -13,6 +13,46 @@ type: journal
 
 The entries marked **new** or **reading** are open: nobody has built them. Pick one, and it is yours.
 
+### 2026-11 · G10 carry with a volatility switch to the funding legs
+Carry pays a premium for carrying crash risk, and the crash comes when FX volatility spikes; stepping out (or flipping) in the top-volatility state keeps the premium and turns the unwind into a gain. [source: Clarida 2009, note] and [source: Brunnermeier 2008, Table 2]
+- **Operator**: condition
+- **What's new**: Clarida 2009 documents that baskets lose in the top volatility quartile and stops there → trade G10 carry only when realized FX vol is not in its top state, and in that state hold the funding legs (long JPY, CHF vs USD) instead. One brick changed: the state rule.
+- **Bricks**: [[Market state split]] applied to [[Carry]]
+- **Evidence**: G10 carry baskets earn 2.38% to 5.66% a year 1990-2009, and in the top realized-vol quartile 1v1 loses -9.75% (Clarida 2009, note; gross, pre-2009 sample). Carry loses when VIX rises; Sharpe 0.784 for 3v3 quarterly (Brunnermeier 2008, Table 2, 8 currencies, gross). Carry crisis-window market beta reaches 1.22 (Lustig 2008, in-sample, not out of sample).
+- **First kill**: crisis-window market beta of the switched strategy vs SPY (Crisis-window market beta card): if it stays above 0.3 in 2008, 2020, 2025, the idea is dead. Then the net Sharpe with the vol rule against plain carry on 2008-2026 train.
+- **Data**: fx_daily (9 USD pairs from 2008) and rates_monthly 3-month rates; have it. Rate differential is an interbank proxy, not forward points. Assumption: Defaults.md costs, 2x stress, signal lag one month.
+`carry` · [[2009 - Clarida Davis Pedersen - Currency Carry Trade Regimes Beyond the Fama Regression]] · **new** · revisit 2027-05
+
+### 2026-11 · FX value: five-year real exchange rate, G10 vs USD
+Currencies that became cheap in real terms earn a premium for being held when carry crashes; value is a different bet from carry and is negatively related to it. [source: Menkhoff 2016, note] and [source: Asness 2013, note]
+- **Operator**: replicate
+- **What's new**: Menkhoff 2016 sorts 22 currencies on the 5-year real rate change → the same sort on the 9 G10 pairs vs USD with desk CPI and FX spot, dollar-neutral, monthly, no purge of fundamentals (one brick, the plain signal).
+- **Bricks**: [[Cross-sectional value signal]] applied to [[Dollar-neutral and dollar leg split]]
+- **Evidence**: Sharpe 0.44 to 0.51, 1976-2014, gross; the purged version reaches 0.79-0.91 but a two-quarter lag cuts it to 0.39-0.61; standard drawdown about -25% in 1990-91 (Menkhoff 2016, note). Value and momentum correlate about -0.5 within a market (Asness 2013, note); currency value t-stats 1.8 to 2.6.
+- **First kill**: rank IC and Sharpe with the CPI lag of one quarter on 2008-2026 train. Several CPI series are flagged stale in cpi_quality_report: drop them and see if fewer than 7 pairs remain. Then the equity beta in stress windows.
+- **Data**: cpi.parquet, fx_daily; have it. Quarterly AUD and NZD CPI, no vintages, so own lag. Assumption: Defaults.md.
+`value` · [[2016 - Menkhoff Sarno Schmeling et al - Currency Value]] · **new** · revisit 2027-05
+
+### 2026-11 · Treasury curve carry: duration-neutral roll-down across maturities
+Maturities with high yield per unit of duration (steep part of the curve) earn their carry, and a duration-neutral long-short keeps rate level and equity beta out. [source: Koijen 2013, note]
+- **Operator**: transpose
+- **What's new**: Koijen 2013 builds bond carry across countries and slopes → here across the US maturity ladder only (1Y to 30Y), long steepest roll-down, short flattest, DV01-neutral. It also differs from Bond Trend Demeaned (a signal on past returns, killed): this one uses the curve, not past return.
+- **Bricks**: [[Carry signal]] applied to [[Dollar-neutral and dollar leg split]]
+- **Evidence**: bond carry strategies have Sharpe below passive long (level 0.52 vs 0.74; slope 0.66 vs 0.71) and all carry strategies lose in global carry drawdowns (Koijen 2013, note, gross). Bond value and momentum not significant (Asness 2013, note). So the prior is weak; it enters for the payoff profile, not the evidence.
+- **First kill**: the Sharpe of the long-short against zero and its beta to IEF-TLT and SPY, on monthly ladder returns from ust_curve (average-of-month yields smooth the series: treat the Sharpe as upward biased and say so). If net Sharpe is under 0.3 or the equity beta is not under 0.1, dead. Expect the likely result is dead.
+- **Data**: ust_curve.parquet (1Y to 30Y, 2004-2026, monthly average); have it. Returns built from yields by a duration approximation, not tradable ETFs for all maturities (SHY, IEF, TLT only). Assumption: Defaults.md.
+`carry` · [[2013 - Koijen Moskowitz Pedersen et al - Carry]] · **new** · revisit 2027-05
+
+### 2026-11 · Commodity cross-sectional momentum on liquid ETFs
+Commodities that rose over 12 months keep rising because inventories adjust slowly and speculators extrapolate; the long-short is dollar-neutral and its pay is unrelated to equities. [source: Gorton 2007, note]
+- **Operator**: transpose
+- **What's new**: Gorton 2007 sorts 31 futures into halves → sort the liquid commodity ETFs (GLD, DBC, USO, GSG and sector ETFs from the 34 in the desk set), long top third, short bottom third. ETFs bring roll cost and contango the futures sort did not.
+- **Bricks**: [[Cross-sectional momentum]] applied to [[Always-long benchmark comparison]]
+- **Evidence**: high 12-month momentum beats low by 13.36% a year, t = 4.93, 1969-2006, gross, no costs (Gorton 2007, note); Zaremba 2016: 0.74% a month, t = 2.79, 1987-2013, gross; Lempérière 2014: commodity t falls from 4.5 long-only to 3.1 de-biased.
+- **First kill**: net Sharpe at the ETF cost and 25 bp short borrow, and loser-leg ETF decay (USO-type contango). If the short leg's return is only roll decay, dead. Then beta to SPY in 2008, 2020, 2025.
+- **Data**: etf_daily (34 commodity ETFs, some short-lived, survivorship must be checked in quality_report); have it. Assumption: Defaults.md.
+`trend` · [[2007 - Gorton Hayashi Rouwenhorst - The Fundamentals of Commodity Futures Returns]] · **new** · revisit 2027-05
+
 ### 2026-11 · Multi-asset ETFs: 12-month time-series trend
 Investors under-react to news and chase it later, so an asset's own 12-month excess return predicts its next month. [source: Moskowitz 2012, p. 245, 248-249]
 - **Operator**: transpose
